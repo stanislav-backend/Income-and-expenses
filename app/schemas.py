@@ -35,3 +35,19 @@ class CreateWalletRequest(BaseModel):
         if v < 0:
             raise ValueError('Initial balance cannot be negative')
         return v
+
+class UserRequest(BaseModel):
+    login: str = Field(..., max_length=127)
+
+    @field_validator('login')
+    def login_not_empty(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError('Login cannot be empty')
+        return v
+
+class UserResponse(UserRequest):
+    model_config = {
+        "from_attributes": True
+        }
+    id: int

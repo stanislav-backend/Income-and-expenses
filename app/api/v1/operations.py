@@ -4,14 +4,15 @@ from fastapi import APIRouter
 from sqlalchemy.orm import Session
 from app.dependency import get_db
 from fastapi import Depends
-
+from app.dependency import get_current_user
+from app.models import User 
 
 router = APIRouter()
 
 @router.post("/operations/income")
-def add_income(operation: OperationRequest, db: Session = Depends(get_db)):
-    return operations_service.add_income(db, operation)
+def add_income(operation: OperationRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return operations_service.add_income(db, current_user, operation)
 
 @router.post("/operations/expense")
-def add_expense(operation: OperationRequest, db: Session = Depends(get_db)):
-    return operations_service.add_expense(db, operation)
+def add_expense(operation: OperationRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return operations_service.add_expense(db, current_user, operation)
